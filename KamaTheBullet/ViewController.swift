@@ -60,13 +60,14 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             return
         }
         
-//        if (firstHit == nil) {
-//            firstHit = result[0]
-//        } else {
-            insertCube(hitResult: result[0])
+        if (firstHit == nil) {
+            firstHit = result[0]
+        } else {
+            //            insertCube(hitResult: result[0])
             
-            //insertKama(secondHit: result[0])
-//        }
+            insertKama(secondHit: result[0])
+            firstHit = nil
+        }
     }
     
     func insertKama(secondHit: ARHitTestResult) {
@@ -74,50 +75,64 @@ class ViewController: UIViewController, ARSCNViewDelegate {
             return
         }
         
-        let maxZ = max(firstHit.worldTransform.columns.3.z, secondHit.worldTransform.columns.3.z)
         
         
-    }
-    
-    func centerbetweenHits(_ first: ARHitTestResult, _ second: ARHitTestResult) -> (Float, Float) {
-        let x1 = first.worldTransform.columns.3.x
-        let x2 = second.worldTransform.columns.3.x
+        guard let firstSurface = firstHit.anchor as? ARPlaneAnchor else {
+            return
+        }
+        guard let secondSurface = secondHit.anchor as? ARPlaneAnchor else {
+            return
+        }
         
-        let y1 = first.worldTransform.columns.3.y
-        let y2 = second.worldTransform.columns.3.y
+        print(firstSurface.center.y)
+        print(secondSurface.center.y)
+        let maxY = max(firstSurface.transform.columns.3.y, secondSurface.transform.columns.3.y)
+        print(maxY)
         
-        let x3 = (x1 + x2) / 2
-        let y3 = (y1 + y2) / 2
-
-        return (x3, y3)
-    }
-    
-    func insertCube(hitResult: ARHitTestResult) {
+        let center = centerBetweenHits(firstHit, secondHit)
         
-        let cube = SCNBox(width: 1, height: 0.5, length: 0.1, chamferRadius: 0)
+        let kamaCube = SCNBox(width: 1, height: 0.5, length: 0.1, chamferRadius: 0)
         let kamaMaterial = SCNMaterial()
         kamaMaterial.diffuse.contents = #imageLiteral(resourceName: "kama")
         let kamaFlippedMaterial = SCNMaterial()
         kamaFlippedMaterial.diffuse.contents = #imageLiteral(resourceName: "kama_flipped")
         let clearMaterial = SCNMaterial()
         clearMaterial.transparency = 0
-        cube.materials = [kamaMaterial, clearMaterial, kamaFlippedMaterial, clearMaterial, clearMaterial, clearMaterial]
+        kamaCube.materials = [kamaMaterial, clearMaterial, kamaFlippedMaterial, clearMaterial, clearMaterial, clearMaterial]
         
-        let position = SCNVector3(hitResult.worldTransform.columns.3.x,
-                                  hitResult.worldTransform.columns.3.y + 0.2,
-                                  hitResult.worldTransform.columns.3.z)
+        let position = SCNVector3(center.0,
+                                  maxY + 0.1,
+                                  center.1)
         
-//        let cube = SCNBox(width: 0.25, height: 0.1, length: 0.05, chamferRadius: 0)
+        //        let cube = SCNBox(width: 0.25, height: 0.1, length: 0.05, chamferRadius: 0)
         
-        let cubeNode = SCNNode(geometry: cube)
-        cubeNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
+        let kamaNode = SCNNode(geometry: kamaCube)
+        kamaNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
         
-        cubeNode.physicsBody?.mass = 2.0
+        kamaNode.physicsBody?.mass = 2.0
         
         
-        cubeNode.position = position
+        kamaNode.position = position
         
-        sceneView.scene.rootNode.addChildNode(cubeNode)
+        sceneView.scene.rootNode.addChildNode(kamaNode)
+    }
+    
+    func centerBetweenHits(_ first: ARHitTestResult, _ second: ARHitTestResult) -> (Float, Float) {
+        let x1 = first.worldTransform.columns.3.x
+        let x2 = second.worldTransform.columns.3.x
+        
+        let y1 = first.worldTransform.columns.3.z
+        let y2 = second.worldTransform.columns.3.z
+        
+        let x3 = (x1 + x2) / 2
+        let y3 = (y1 + y2) / 2
+        
+        return (x3, y3)
+    }
+    
+    func insertCube(hitResult: ARHitTestResult) {
+        
+        
         
         
         
@@ -156,7 +171,7 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         surface.position = SCNVector3(planeAnchor.center.x, 0, planeAnchor.center.z)
         
         surface.physicsBody = SCNPhysicsBody(type: .kinematic, shape: SCNPhysicsShape(geometry: boxGeometry, options: nil))
-    
+        
     }
     
     func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
