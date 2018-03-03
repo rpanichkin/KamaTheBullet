@@ -11,8 +11,12 @@ import SceneKit
 import ARKit
 
 class ViewController: UIViewController, ARSCNViewDelegate {
-
+    
     @IBOutlet var sceneView: ARSCNView!
+    
+    var firstHit: ARHitTestResult?
+    
+    var surfaceDictionary: [UUID: SCNNode] = [:]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,11 +27,12 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
         
-        // Create a new scene
-        let scene = SCNScene(named: "art.scnassets/ship.scn")!
+        self.sceneView.autoenablesDefaultLighting = true
+        self.sceneView.debugOptions  = [.showConstraints, .showLightExtents,
+                                        ARSCNDebugOptions.showFeaturePoints,
+                                        ARSCNDebugOptions.showWorldOrigin]
         
-        // Set the scene to the view
-        sceneView.scene = scene
+        self.sceneView.automaticallyUpdatesLighting = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -35,9 +40,87 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Create a session configuration
         let configuration = ARWorldTrackingConfiguration()
-
+        configuration.planeDetection = .horizontal
+        
         // Run the view's session
         sceneView.session.run(configuration)
+        
+        sceneView.addGestureRecognizer(UITapGestureRecognizer(target: self, action: #selector(insetCubeRecognizer)))
+    }
+    
+    @objc func insetCubeRecognizer(gesture: UIGestureRecognizer) {
+        // Take the screen space tap coordinates and pass them to the hitTest method on the ARSCNView instance
+        let tapPoint = gesture.location(in: sceneView)
+        let result = sceneView.hitTest(tapPoint, types: .existingPlaneUsingExtent)
+        
+        // If the intersection ray passes through any plane geometry they will be returned, with the planes
+        // ordered by distance from the camera
+        if result.count == 0 {
+            AudioServicesPlayAlertSound(kSystemSoundID_Vibrate)
+            return
+        }
+        
+//        if (firstHit == nil) {
+//            firstHit = result[0]
+//        } else {
+            insertCube(hitResult: result[0])
+            
+            //insertKama(secondHit: result[0])
+//        }
+    }
+    
+    func insertKama(secondHit: ARHitTestResult) {
+        guard let firstHit = firstHit else {
+            return
+        }
+        
+        let maxZ = max(firstHit.worldTransform.columns.3.z, secondHit.worldTransform.columns.3.z)
+        
+        
+    }
+    
+    func centerbetweenHits(_ first: ARHitTestResult, _ second: ARHitTestResult) -> (Float, Float) {
+        let x1 = first.worldTransform.columns.3.x
+        let x2 = second.worldTransform.columns.3.x
+        
+        let y1 = first.worldTransform.columns.3.y
+        let y2 = second.worldTransform.columns.3.y
+        
+        let x3 = (x1 + x2) / 2
+        let y3 = (y1 + y2) / 2
+
+        return (x3, y3)
+    }
+    
+    func insertCube(hitResult: ARHitTestResult) {
+        
+        let cube = SCNBox(width: 1, height: 0.5, length: 0.1, chamferRadius: 0)
+        let kamaMaterial = SCNMaterial()
+        kamaMaterial.diffuse.contents = #imageLiteral(resourceName: "kama")
+        let kamaFlippedMaterial = SCNMaterial()
+        kamaFlippedMaterial.diffuse.contents = #imageLiteral(resourceName: "kama_flipped")
+        let clearMaterial = SCNMaterial()
+        clearMaterial.transparency = 0
+        cube.materials = [kamaMaterial, clearMaterial, kamaFlippedMaterial, clearMaterial, clearMaterial, clearMaterial]
+        
+        let position = SCNVector3(hitResult.worldTransform.columns.3.x,
+                                  hitResult.worldTransform.columns.3.y + 0.2,
+                                  hitResult.worldTransform.columns.3.z)
+        
+//        let cube = SCNBox(width: 0.25, height: 0.1, length: 0.05, chamferRadius: 0)
+        
+        let cubeNode = SCNNode(geometry: cube)
+        cubeNode.physicsBody = SCNPhysicsBody(type: .dynamic, shape: nil)
+        
+        cubeNode.physicsBody?.mass = 2.0
+        
+        
+        cubeNode.position = position
+        
+        sceneView.scene.rootNode.addChildNode(cubeNode)
+        
+        
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -51,17 +134,62 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         super.didReceiveMemoryWarning()
         // Release any cached data, images, etc that aren't in use.
     }
-
+    
     // MARK: - ARSCNViewDelegate
     
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
+    func renderer(_ renderer: SCNSceneRenderer, didUpdate node: SCNNode, for anchor: ARAnchor) {
+        guard let planeAnchor = anchor as? ARPlaneAnchor else {
+            return
+        }
+        
+        guard let surface = surfaceDictionary[anchor.identifier] else {
+            return
+        }
+        
+        guard let boxGeometry = surface.geometry as? SCNBox else {
+            return
+        }
+        
+        boxGeometry.width = CGFloat(planeAnchor.extent.x);
+        boxGeometry.length = CGFloat(planeAnchor.extent.z);
+        
+        surface.position = SCNVector3(planeAnchor.center.x, 0, planeAnchor.center.z)
+        
+        surface.physicsBody = SCNPhysicsBody(type: .kinematic, shape: SCNPhysicsShape(geometry: boxGeometry, options: nil))
+    
+    }
+    
+    func renderer(_ renderer: SCNSceneRenderer, didAdd node: SCNNode, for anchor: ARAnchor) {
+        guard let planeAnchor = anchor as? ARPlaneAnchor else {
+            return
+        }
+        let height = 0.0001
+        let surface = SCNBox(width: CGFloat(planeAnchor.extent.x),
+                             height: CGFloat(height),
+                             length: CGFloat(planeAnchor.extent.z),
+                             chamferRadius: 0)
+        let surfaceNode = SCNNode(geometry: surface)
+        surfaceNode.position = SCNVector3(0, 0, 0)
+        surfaceNode.physicsBody = SCNPhysicsBody(type: .kinematic, shape: SCNPhysicsShape(geometry: surface, options: nil))
+        
+        let voidMaterial = SCNMaterial()
+        voidMaterial.diffuse.contents = UIColor.red.withAlphaComponent(0.4)
+        surface.materials = [voidMaterial, voidMaterial, voidMaterial, voidMaterial, voidMaterial, voidMaterial]
+        
+        
+        surfaceDictionary[anchor.identifier] = surfaceNode
+        
+        node.addChildNode(surfaceNode)
+        
+    }
+    
     func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
         let node = SCNNode()
-     
+        
+        
         return node
     }
-*/
+    
     
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
@@ -78,3 +206,4 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
     }
 }
+
