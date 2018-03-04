@@ -1,23 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13122.16" systemVersion="17A278a" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BV1-FR-VrT">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13104.12"/>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
         <!--View Controller-->
         <scene sceneID="tXr-a1-R10">
             <objects>
-                <viewController id="BV1-FR-VrT" customClass="ViewController" customModuleProvider="target" sceneMemberID="viewController">
-                    <arscnView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" id="BrB-h1-WRS">
+                <viewController id="BV1-FR-VrT" customClass="ViewController" customModule="KamaTheBullet" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="R25-ZJ-Ifg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                    </arscnView>
+                        <subviews>
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="aeR-Q7-37p">
+                                <rect key="frame" x="0.0" y="20" width="375" height="647"/>
+                            </arscnView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="D0o-Tl-Sxz">
+                                <rect key="frame" x="10" y="30" width="39" height="30"/>
+                                <state key="normal" title="Erase"/>
+                                <connections>
+                                    <action selector="eraseButtonAction:" destination="BV1-FR-VrT" eventType="touchUpInside" id="hEO-6K-9Vc"/>
+                                </connections>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" alpha="0.0" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ПОТРАЧЕНО" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zjb-wJ-3jA">
+                                <rect key="frame" x="34" y="303.5" width="306.5" height="60"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="50"/>
+                                <color key="textColor" red="1" green="0.33440714659999998" blue="0.184136155" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="dzO-6f-DRh" firstAttribute="trailing" secondItem="aeR-Q7-37p" secondAttribute="trailing" id="3GC-nT-Lz8"/>
+                            <constraint firstItem="D0o-Tl-Sxz" firstAttribute="top" secondItem="dzO-6f-DRh" secondAttribute="top" constant="10" id="BRB-yA-cvH"/>
+                            <constraint firstItem="Zjb-wJ-3jA" firstAttribute="centerY" secondItem="R25-ZJ-Ifg" secondAttribute="centerY" id="Hkh-2t-BRW"/>
+                            <constraint firstItem="Zjb-wJ-3jA" firstAttribute="centerX" secondItem="R25-ZJ-Ifg" secondAttribute="centerX" id="lpJ-p1-bAg"/>
+                            <constraint firstItem="aeR-Q7-37p" firstAttribute="top" secondItem="dzO-6f-DRh" secondAttribute="top" id="nmG-wV-tj9"/>
+                            <constraint firstItem="aeR-Q7-37p" firstAttribute="leading" secondItem="dzO-6f-DRh" secondAttribute="leading" id="qHa-ce-aoT"/>
+                            <constraint firstItem="dzO-6f-DRh" firstAttribute="bottom" secondItem="aeR-Q7-37p" secondAttribute="bottom" id="qPo-o5-EgD"/>
+                            <constraint firstItem="D0o-Tl-Sxz" firstAttribute="leading" secondItem="dzO-6f-DRh" secondAttribute="leading" constant="10" id="yQX-Pm-x2j"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="dzO-6f-DRh"/>
+                    </view>
                     <connections>
-                        <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
+                        <outlet property="sceneView" destination="aeR-Q7-37p" id="HJA-Wr-cCI"/>
+                        <outlet property="wastedLabel" destination="Zjb-wJ-3jA" id="nuo-ou-nmI"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>

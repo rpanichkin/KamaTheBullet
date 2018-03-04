@@ -7,6 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		54CDE5FF204BD4A300F58A6F /* salam.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 54CDE5FE204BD4A300F58A6F /* salam.mp3 */; };
+		54CDE601204BD6F300F58A6F /* shaa.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 54CDE600204BD6F300F58A6F /* shaa.mp3 */; };
+		54CDE603204BD76E00F58A6F /* diavol.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 54CDE602204BD76E00F58A6F /* diavol.mp3 */; };
+		54CDE607204BFE7200F58A6F /* sport.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 54CDE606204BFE7200F58A6F /* sport.mp3 */; };
+		54CDE609204BFE7A00F58A6F /* protivnik.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 54CDE608204BFE7A00F58A6F /* protivnik.mp3 */; };
 		CA3BF32F204A725B0030AEA1 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3BF32E204A725B0030AEA1 /* AppDelegate.swift */; };
 		CA3BF331204A725B0030AEA1 /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = CA3BF330204A725B0030AEA1 /* art.scnassets */; };
 		CA3BF333204A725B0030AEA1 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA3BF332204A725B0030AEA1 /* ViewController.swift */; };
@@ -16,6 +21,11 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		54CDE5FE204BD4A300F58A6F /* salam.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = salam.mp3; sourceTree = "<group>"; };
+		54CDE600204BD6F300F58A6F /* shaa.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = shaa.mp3; sourceTree = "<group>"; };
+		54CDE602204BD76E00F58A6F /* diavol.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = diavol.mp3; sourceTree = "<group>"; };
+		54CDE606204BFE7200F58A6F /* sport.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = sport.mp3; sourceTree = "<group>"; };
+		54CDE608204BFE7A00F58A6F /* protivnik.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = protivnik.mp3; sourceTree = "<group>"; };
 		CA3BF32B204A725B0030AEA1 /* KamaTheBullet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KamaTheBullet.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CA3BF32E204A725B0030AEA1 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		CA3BF330204A725B0030AEA1 /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
@@ -42,6 +52,11 @@
 			children = (
 				CA3BF32D204A725B0030AEA1 /* KamaTheBullet */,
 				CA3BF32C204A725B0030AEA1 /* Products */,
+				54CDE5FE204BD4A300F58A6F /* salam.mp3 */,
+				54CDE600204BD6F300F58A6F /* shaa.mp3 */,
+				54CDE602204BD76E00F58A6F /* diavol.mp3 */,
+				54CDE606204BFE7200F58A6F /* sport.mp3 */,
+				54CDE608204BFE7A00F58A6F /* protivnik.mp3 */,
 			);
 			sourceTree = "<group>";
 		};
@@ -128,8 +143,13 @@
 			files = (
 				CA3BF331204A725B0030AEA1 /* art.scnassets in Resources */,
 				CA3BF33B204A725B0030AEA1 /* LaunchScreen.storyboard in Resources */,
+				54CDE5FF204BD4A300F58A6F /* salam.mp3 in Resources */,
+				54CDE609204BFE7A00F58A6F /* protivnik.mp3 in Resources */,
 				CA3BF338204A725B0030AEA1 /* Assets.xcassets in Resources */,
 				CA3BF336204A725B0030AEA1 /* Main.storyboard in Resources */,
+				54CDE601204BD6F300F58A6F /* shaa.mp3 in Resources */,
+				54CDE603204BD76E00F58A6F /* diavol.mp3 in Resources */,
+				54CDE607204BFE7200F58A6F /* sport.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
